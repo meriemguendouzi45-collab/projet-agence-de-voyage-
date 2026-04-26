@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Input, Select } from "./Inputs";
+import API from "../services/api";
 
 export default function ServiceModal({ type, close }) {
   const { user } = useContext(AuthContext);
@@ -38,10 +39,10 @@ export default function ServiceModal({ type, close }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // ✅ FIXED SUBMIT (ONLY ONE FUNCTION)
   const submit = async () => {
     if (!user) return alert("Login first");
 
-    // ✅ simple validation
     if (type === "flight" && (!form.from || !form.to || !form.date)) {
       return alert("Fill all flight fields");
     }
@@ -49,20 +50,11 @@ export default function ServiceModal({ type, close }) {
     setLoading(true);
 
     try {
-      await fetch("http://localhost:5000/api/services", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth"))?.token
-          }`,
-        },
-        body: JSON.stringify({
-          ...form,
-          type,
-          name: user.name,
-          email: user.email,
-        }),
+      await API.post("/services", {
+        ...form,
+        type,
+        name: user.name,
+        email: user.email,
       });
 
       alert("✅ Request sent!");
@@ -75,7 +67,6 @@ export default function ServiceModal({ type, close }) {
     setLoading(false);
   };
 
-  // 🌍 DATA
   const destinations = [
     "Paris, France","Rome, Italy","Santorini, Greece","Dubai, UAE",
     "Bali, Indonesia","Maldives","London, UK","New York, USA",
@@ -107,22 +98,10 @@ export default function ServiceModal({ type, close }) {
         {type === "flight" && (
           <div className="grid grid-cols-2 gap-3">
             <Input name="from" label="From" value={form.from} onChange={handleChange} />
-            
             <Select name="to" label="To" value={form.to} onChange={handleChange} options={destinations} />
-
-            {/* ✨ NEW AIRLINE */}
-            <Select
-              name="airline"
-              label="Airline"
-              value={form.airline}
-              onChange={handleChange}
-              options={airlines}
-            />
-
+            <Select name="airline" label="Airline" value={form.airline} onChange={handleChange} options={airlines} />
             <Input name="date" label="Departure Date" type="date" value={form.date} onChange={handleChange} />
-            
             <Input name="passengers" label="Passengers" type="number" value={form.passengers} onChange={handleChange} />
-            
             <Select name="class" label="Class" value={form.class} onChange={handleChange} options={["Economy","Business","First Class"]} />
           </div>
         )}

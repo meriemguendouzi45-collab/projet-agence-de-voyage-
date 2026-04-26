@@ -1,14 +1,16 @@
 import axios from "axios";
 
+// ✅ API BASE URL (local + production)
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
 });
 
+// 🔐 Attach token automatically
 API.interceptors.request.use((req) => {
-  const data = JSON.parse(localStorage.getItem("auth"));
+  const auth = JSON.parse(localStorage.getItem("auth"));
 
-  if (data?.token) {
-    req.headers.Authorization = `Bearer ${data.token}`;
+  if (auth?.token) {
+    req.headers.Authorization = `Bearer ${auth.token}`;
   }
 
   return req;
