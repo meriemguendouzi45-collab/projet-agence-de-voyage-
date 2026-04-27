@@ -31,7 +31,7 @@ export default function BookingModal({ trip, close }) {
   const submitBooking = async () => {
     const data = JSON.parse(localStorage.getItem("auth"));
 
-    // إذا ماشي login
+    //  login
     if (!data?.token) {
       window.location.href = "/login";
       return;
