@@ -11,12 +11,13 @@ connectDB();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    /https:\/\/.*\.vercel\.app$/   // 🔥 يقبل أي deploy من vercel
+    "https://projet-agence-de-voyage-nfynl2tqg.vercel.app"  
   ],
   credentials: true
 }));
 
 app.use(express.json());
+app.use(express.static("dist"));
 
 // routes
 app.use("/api/auth", require("./routes/authRoutes"));
