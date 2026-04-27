@@ -7,10 +7,11 @@ const app = express();
 
 connectDB();
 
+// ✅ FIX CORS (allow all vercel domains)
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://projet-agence-de-voyage.vercel.app"
+    /https:\/\/.*\.vercel\.app$/   // 🔥 يقبل أي deploy من vercel
   ],
   credentials: true
 }));
@@ -25,7 +26,7 @@ app.use("/api/messages", require("./routes/messageRoutes"));
 app.use("/api/services", require("./routes/serviceRoutes"));
 app.use("/api/subscribers", require("./routes/subscriberRoutes"));
 
-// ✅ IMPORTANT FOR RENDER
+// ✅ PORT (important for Render)
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
