@@ -2,7 +2,7 @@ import axios from "axios";
 
 // ✅ API BASE URL (Render backend)
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+  baseURL: `https://projet-agence-de-voyage.onrender.com/api`,
 });
 
 // 🔐 Attach token automatically
