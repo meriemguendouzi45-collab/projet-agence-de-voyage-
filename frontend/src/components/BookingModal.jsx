@@ -40,7 +40,7 @@ export default function BookingModal({ trip, close }) {
     setLoading(true);
 
     try {
-      const res = await fetch("https://projet-agence-de-voyage.onrender.com/api", {
+      const res = await fetch("https://projet-agence-de-voyage.onrender.com/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
